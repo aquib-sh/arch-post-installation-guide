@@ -48,3 +48,27 @@ Install
 ```bash
 pacman -Syu reflector
 ```
+Run to get the updated mirrorlist
+```
+reflector --latest 5 --protocol https --sort rate --save /etc/pacman.d/mirrorlist 
+```
+### Configure reflector to run in background
+Edit `/etc/xdg/reflector/reflector.conf` as below.
+```bash
+# Set the output path where the mirrorlist will be saved (--save).  
+--save /etc/pacman.d/mirrorlist  
+  
+# Select the transfer protocol (--protocol).  
+--protocol https  
+    
+# Use only the  most recently synchronized mirrors (--latest).  
+--latest 5  
+  
+# Sort the mirrors by Synchronization time (--sort)
+--sort rate
+```
+Enable and start reflector service
+```bash
+systemctl enable reflector.service
+systemctl start reflector.service
+```

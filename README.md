@@ -72,3 +72,43 @@ Enable and start reflector service
 systemctl enable reflector.service
 systemctl start reflector.service
 ```
+
+## Mounting a new storage device
+### Temporarily mounting a device
+```bash
+mkdir /mnt/<friendly-name>
+mount /dev/<paritition-name>
+```
+**example**:
+```bash
+mkdir /mnt/games
+mount /dev/sdb1
+```
+### Permanently mounting a device
+Actually there is no permanent mounting of a device. Each time on boot the parititons are mounted as per their definition in `/etc/fstab`
+To add a device to mount at a specific mountpoint each time on boot we have to add it's entry in `/etc/fstab` using it's UUID.
+
+**Create a mountpoint if it does not exists**
+```bash
+mkdir /mnt/games
+```
+**Finding UUID of a partition**
+To get the details on available partitions
+```bash
+lsblk
+```
+To get the UUID of a specific partition
+```bash
+blkid /dev/sdb1
+```
+
+Now note of value of UUID in the output of previous command along with it's file system type and add entry in `/etc/fstab` in the sequence of 
+`<uuid> <mount-point> <filesystem-type> defaults`
+```bash
+UUID=BCCE0ECDCE0E803E /mnt/games ntfs defaults
+```
+Save the file and execute the below commands to reload the filesystem to mount the defined devices.
+```bash
+systemctl daemon-reload
+systemctl restart local-fs.target
+```

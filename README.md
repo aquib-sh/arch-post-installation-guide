@@ -1,5 +1,5 @@
-# arch-post-installation-guide
-A personal basic guide of useful steps after installation of Arch Linux
+# Arch Linux : Post Installation Guide
+A personal guide of useful steps after installation of Arch Linux
 
 ## Enable dhcpcd service for DNS host name resolution and configure DNS nameserver
 Install dhcpcd if you haven't already, for doing this you will need to chroot into the installed filesystem using arch bootable usb
@@ -112,3 +112,117 @@ Save the file and execute the below commands to reload the filesystem to mount t
 systemctl daemon-reload
 systemctl restart local-fs.target
 ```
+
+## Install recommended packages
+### Fonts
+```bash
+pacman -Syu ttf-firacode-nerd ttf-hanazono ttf-inconsolata ttf-indic-otf ttf-jetbrains-mono ttf-liberation ttf-opensans ttf-roboto-mono adobe-source-code-pro-fonts adobe-source-han-sans-jp-fonts cantarell-fonts gnu-free-fonts gsfonts libfontenc libxfont2 noto-fonts-emoji terminus-font wqy-bitmapfont
+```
+###  Multimedia tools
+```bash
+pacman -Syu gimp krita obs-studio audacity openshot vlc
+```
+
+### Tools
+```bash
+pacman -Syu xclip neofetch htop lm_sensors
+```
+
+## GNOME Configuration
+### Force GNOME to Alt + Tab only in current workspace
+Run the below command as **non-root**
+```bash
+gsettings set org.gnome.shell.app-switcher current-workspace-only true
+```
+
+## Further recommended configurations
+### Setup dnsmasq
+Setup `dnsmasq` to reduce the time spent with resolving DNS 
+
+**Install**
+```bash
+pacman -Syu dnsmasq
+```
+
+**Enable/Start the service**
+```bash
+systemctl enable dnsmasq && systemctl start dnsmasq
+```
+
+**Edit `/etc/dnsmasq.conf`**
+Uncomment and the below lines in the file or simply append them to it
+```
+listen-address=::1,127.0.0.1
+cache-size=1000
+no-resolv
+server=8.8.8.8
+server=8.8.4.4
+```
+
+**Edit `/etc/resolv.conf`**
+```
+nameserver ::1
+nameserver 127.0.0.1
+options trust-ad
+```
+
+if you are using NetworkManager (which most likely you are) then **make `/etc/resolv.conf` immutable** to avoid the file getting overwritten after reboot
+```bash
+chattr +i /etc/resolv.conf
+```
+
+**Restart dnsmasq**
+```
+systemctl restart dnsmasq
+```
+
+**Stop dhcpcd**, we don't need it anymore
+```
+systemctl disable dhcpcd && systemctl stop dhcpcd
+```
+[Test dnsmasq](https://wiki.archlinux.org/title/dnsmasq#Test)
+
+References: 
+- [dnsmasq](https://wiki.archlinux.org/title/dnsmasq)
+
+### Add .vimrc
+```
+filetype plugin indent on
+syntax on
+
+" enable copy pasting from mouse using shift
+set mouse=a
+
+" show existing tab with 4 spaces width
+set tabstop=4
+
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+
+" On pressing tab, insert 4 spaces
+set expandtab
+
+" show line numbers
+set number
+
+" Highlight search results
+set hlsearch
+
+" Show matching brackets when text indicator is over them
+set showmatch
+
+" Turn backup off, since most stuff is in SVN, git etc. anyway...
+set nobackup
+set nowb
+set noswapfile
+
+set ai "Auto indent
+set si "Smart indent
+```
+
+
+
+
+
+  
+

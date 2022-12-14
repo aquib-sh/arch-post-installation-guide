@@ -128,15 +128,14 @@ pacman -Syu gimp krita obs-studio audacity openshot vlc
 pacman -Syu xclip neofetch htop lm_sensors
 ```
 
+# Further recommended configurations
 ## GNOME Configuration
 ### Force GNOME to Alt + Tab only in current workspace
 Run the below command as **non-root**
 ```bash
 gsettings set org.gnome.shell.app-switcher current-workspace-only true
 ```
-
-## Further recommended configurations
-### Setup dnsmasq
+## Setup dnsmasq
 Setup `dnsmasq` to reduce the time spent with resolving DNS 
 
 **Install**
@@ -185,7 +184,7 @@ systemctl disable dhcpcd && systemctl stop dhcpcd
 References: 
 - [dnsmasq](https://wiki.archlinux.org/title/dnsmasq)
 
-### Add .vimrc
+## Add .vimrc
 ```
 filetype plugin indent on
 syntax on
